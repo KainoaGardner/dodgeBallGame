@@ -1,0 +1,12 @@
+WIDTH = 1920
+HEIGHT = 1080
+EDGEGAP = 100
+FPS = 60
+
+RED = "#e74c3c"
+YELLOW = "#f1c40f"
+GREEN = "#2ecc71"
+BLUE = "#3498db"
+WHITE = "#ecf0f1"
+GRAY = "#95a5a6"
+DARKGRAY = "#7f8c8d"
