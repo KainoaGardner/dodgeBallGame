@@ -21,8 +21,10 @@ class Ball(pygame.sprite.Sprite):
         self.xVel = 0
         self.yVel = 0
         self.radius = radius
+        self.hit = False
         self.friction = 0.2
         self.state = "1"
+        self.hitCoolDown = 0
 
     def collide(self,center,playerHalfSize):
         if (self.x - self.radius < center[0] + playerHalfSize and self.x + self.radius > center[0] - playerHalfSize) and (self.y - self.radius < center[1] + playerHalfSize and self.y + self.radius > center[1] - playerHalfSize):
@@ -37,8 +39,6 @@ class Ball(pygame.sprite.Sprite):
         angle = math.atan2(self.yVel,self.xVel)
         xFriction = abs(math.cos(angle) * self.friction)
         yFriction = abs(math.sin(angle) * self.friction)
-
-        print((xFriction,yFriction),(self.xVel,self.yVel))
 
         if self.xVel > 0:
             self.xVel -= min(xFriction,self.xVel)
@@ -58,6 +58,23 @@ class Ball(pygame.sprite.Sprite):
         if self.xVel == self.yVel == 0:
             self.state = "stop"
 
+        if self.hit == True:
+            self.hitCoolDown += 1
+        if self.hitCoolDown > 5:
+            self.hitCoolDown = 0
+            self.hit = False
+
+        if self.xVel > 25:
+            self.xVel = 25
+        if self.xVel < -25:
+            self.xVel = -25
+
+        if self.yVel > 25:
+            self.yVel = 25
+        if self.yVel < -25:
+            self.yVel = -25
+
+
     def display(self,screen):
         self.update()
         if self.state == "stop":
@@ -74,3 +91,30 @@ ballGroup = pygame.sprite.Group()
 ballGroup.add(Ball(WIDTH//2,HEIGHT // 2,30))
 ballGroup.add(Ball(WIDTH//2,HEIGHT * 1/3,30))
 ballGroup.add(Ball(WIDTH//2,HEIGHT * 2/3,30))
+
+# ballGroup.add(Ball(WIDTH//4,HEIGHT // 2,30))
+#
+# ballGroup.add(Ball(WIDTH * 7//10,HEIGHT * 3//10,30))
+# ballGroup.add(Ball(WIDTH* 7//10,HEIGHT * 4//10,30))
+# ballGroup.add(Ball(WIDTH* 7//10,HEIGHT * 5//10,30))
+# ballGroup.add(Ball(WIDTH * 7//10,HEIGHT *  6//10,30))
+# ballGroup.add(Ball(WIDTH* 7//10,HEIGHT * 7//10,30))
+#
+# ballGroup.add(Ball(WIDTH* 6//10,HEIGHT * 4//10,30))
+# ballGroup.add(Ball(WIDTH* 6//10,HEIGHT * 5//10,30))
+# ballGroup.add(Ball(WIDTH * 6//10,HEIGHT *  6//10,30))
+#
+# ballGroup.add(Ball(WIDTH* 5//10,HEIGHT * 4.5//10,30))
+# ballGroup.add(Ball(WIDTH* 5//10,HEIGHT * 5.5//10,30))
+#
+# ballGroup.add(Ball(WIDTH* 4//10,HEIGHT * 5//10,30))
+
+
+
+# ballGroup.add(Ball(WIDTH//4,HEIGHT // 2,30))
+# ballGroup.add(Ball(WIDTH//4,HEIGHT * 1/3,30))
+# ballGroup.add(Ball(WIDTH//4,HEIGHT * 2/3,30))
+#
+# ballGroup.add(Ball(WIDTH//4 + WIDTH // 2,HEIGHT // 2,30))
+# ballGroup.add(Ball(WIDTH//4 + WIDTH // 2,HEIGHT * 1/3,30))
+# ballGroup.add(Ball(WIDTH//4 + WIDTH // 2,HEIGHT * 2/3,30))

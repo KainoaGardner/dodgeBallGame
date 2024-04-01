@@ -70,6 +70,10 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE] and self.holdBall != None:
             self.shootBall()
 
+        if keys[pygame.K_r]:
+            for ball in ballGroup:
+                ball.hit = False
+
 
     def getAngle(self):
         self.center = (self.x + self.width / 2,self.y + self.height / 2)
@@ -89,13 +93,15 @@ class Player(pygame.sprite.Sprite):
             if ball.collide(self.center,self.width // 2):
                 if ball.state == "stop" and self.holdBall == None:
                     self.holdBall = ball
-                elif ball.state != str(self.turn):
-                    print("die")
-
+                elif ball.state != str(self.turn) and ball.state != "stop":
+                    # print(str(self.turn))
+                    pass
     def grabBall(self):
         if self.holdBall != None:
             self.holdBall.x = self.point[0]
             self.holdBall.y = self.point[1]
+            self.holdBall.xVel = 0
+            self.holdBall.yVel = 0
 
     def shootBall(self):
         xVel = math.cos(math.radians(self.angle)) * 25
