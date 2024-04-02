@@ -4,13 +4,18 @@ import pygame
 
 def displayCourt(screen):
     screen.fill(DARKGRAY)
-    pygame.draw.rect(screen,GRAY,(EDGEGAP,EDGEGAP,WIDTH - EDGEGAP * 2,HEIGHT - EDGEGAP * 2))
-    pygame.draw.line(screen,RED,(EDGEGAP,EDGEGAP),(WIDTH - EDGEGAP,EDGEGAP),5)
-    pygame.draw.line(screen, RED, (EDGEGAP, HEIGHT - EDGEGAP), (WIDTH - EDGEGAP, HEIGHT - EDGEGAP), 5)
-    pygame.draw.line(screen, RED, (EDGEGAP, EDGEGAP), (EDGEGAP, HEIGHT - EDGEGAP), 5)
-    pygame.draw.line(screen, RED, (WIDTH - EDGEGAP, EDGEGAP), (WIDTH - EDGEGAP, HEIGHT - EDGEGAP), 5)
-    pygame.draw.line(screen,RED,(WIDTH // 2, EDGEGAP),(WIDTH // 2,HEIGHT - EDGEGAP),5)
+    pygame.draw.rect(screen,COURTCOLOR,(EDGEGAP,EDGEGAP,WIDTH - EDGEGAP * 2,HEIGHT - EDGEGAP * 2))
 
+def drawCountLines(screen):
+    pygame.draw.line(screen,RED,(EDGEGAP,EDGEGAP),(WIDTH - EDGEGAP,EDGEGAP),10)
+    pygame.draw.line(screen, RED, (EDGEGAP, HEIGHT - EDGEGAP), (WIDTH - EDGEGAP, HEIGHT - EDGEGAP), 10)
+    pygame.draw.line(screen, RED, (EDGEGAP, EDGEGAP), (EDGEGAP, HEIGHT - EDGEGAP), 10)
+    pygame.draw.line(screen, RED, (WIDTH - EDGEGAP, EDGEGAP), (WIDTH - EDGEGAP, HEIGHT - EDGEGAP), 10)
+    pygame.draw.line(screen,RED,(WIDTH // 2, EDGEGAP),(WIDTH // 2,HEIGHT - EDGEGAP),10)
+    pygame.draw.circle(screen,RED,(WIDTH // 2,HEIGHT // 2),WIDTH // 10,10)
+
+def resetRound():
+    pass
 
 
 class Ball(pygame.sprite.Sprite):
@@ -29,8 +34,8 @@ class Ball(pygame.sprite.Sprite):
     def collide(self,center,playerHalfSize):
         if (self.x - self.radius < center[0] + playerHalfSize and self.x + self.radius > center[0] - playerHalfSize) and (self.y - self.radius < center[1] + playerHalfSize and self.y + self.radius > center[1] - playerHalfSize):
             return True
-        else:
-            return False
+
+        return False
 
     def update(self):
         self.x += self.xVel
@@ -55,12 +60,12 @@ class Ball(pygame.sprite.Sprite):
         if self.y + self.yVel - self.radius < EDGEGAP or self.y + self.yVel + self.radius > HEIGHT - EDGEGAP:
             self.yVel *= -1
 
-        if self.xVel == self.yVel == 0:
+        if abs(self.xVel) < 5 and abs(self.yVel) < 5:
             self.state = "stop"
 
         if self.hit == True:
             self.hitCoolDown += 1
-        if self.hitCoolDown > 5:
+        if self.hitCoolDown > 3:
             self.hitCoolDown = 0
             self.hit = False
 
@@ -74,17 +79,25 @@ class Ball(pygame.sprite.Sprite):
         if self.yVel < -25:
             self.yVel = -25
 
+        if self.x < EDGEGAP:
+            self.x = EDGEGAP
+        if self.x > WIDTH - EDGEGAP:
+            self.x = WIDTH - EDGEGAP
+        if self.y < EDGEGAP:
+            self.y = EDGEGAP
+        if self.y > HEIGHT - EDGEGAP:
+            self.y = HEIGHT - EDGEGAP
 
     def display(self,screen):
         self.update()
         if self.state == "stop":
-            pygame.draw.circle(screen,RED,(self.x,self.y),self.radius)
+            pygame.draw.circle(screen,WHITE,(self.x,self.y),self.radius)
         elif self.state == "0":
             pygame.draw.circle(screen,YELLOW,(self.x,self.y),self.radius)
         elif self.state == "1":
             pygame.draw.circle(screen,BLUE,(self.x,self.y),self.radius)
 
-        pygame.draw.circle(screen, WHITE, (self.x, self.y), self.radius + 1,5)
+        pygame.draw.circle(screen, BLACK, (self.x, self.y), self.radius + 1,5)
 
 
 ballGroup = pygame.sprite.Group()
@@ -92,29 +105,3 @@ ballGroup.add(Ball(WIDTH//2,HEIGHT // 2,30))
 ballGroup.add(Ball(WIDTH//2,HEIGHT * 1/3,30))
 ballGroup.add(Ball(WIDTH//2,HEIGHT * 2/3,30))
 
-# ballGroup.add(Ball(WIDTH//4,HEIGHT // 2,30))
-#
-# ballGroup.add(Ball(WIDTH * 7//10,HEIGHT * 3//10,30))
-# ballGroup.add(Ball(WIDTH* 7//10,HEIGHT * 4//10,30))
-# ballGroup.add(Ball(WIDTH* 7//10,HEIGHT * 5//10,30))
-# ballGroup.add(Ball(WIDTH * 7//10,HEIGHT *  6//10,30))
-# ballGroup.add(Ball(WIDTH* 7//10,HEIGHT * 7//10,30))
-#
-# ballGroup.add(Ball(WIDTH* 6//10,HEIGHT * 4//10,30))
-# ballGroup.add(Ball(WIDTH* 6//10,HEIGHT * 5//10,30))
-# ballGroup.add(Ball(WIDTH * 6//10,HEIGHT *  6//10,30))
-#
-# ballGroup.add(Ball(WIDTH* 5//10,HEIGHT * 4.5//10,30))
-# ballGroup.add(Ball(WIDTH* 5//10,HEIGHT * 5.5//10,30))
-#
-# ballGroup.add(Ball(WIDTH* 4//10,HEIGHT * 5//10,30))
-
-
-
-# ballGroup.add(Ball(WIDTH//4,HEIGHT // 2,30))
-# ballGroup.add(Ball(WIDTH//4,HEIGHT * 1/3,30))
-# ballGroup.add(Ball(WIDTH//4,HEIGHT * 2/3,30))
-#
-# ballGroup.add(Ball(WIDTH//4 + WIDTH // 2,HEIGHT // 2,30))
-# ballGroup.add(Ball(WIDTH//4 + WIDTH // 2,HEIGHT * 1/3,30))
-# ballGroup.add(Ball(WIDTH//4 + WIDTH // 2,HEIGHT * 2/3,30))

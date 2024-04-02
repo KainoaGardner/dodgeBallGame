@@ -9,4 +9,10 @@ GREEN = "#2ecc71"
 BLUE = "#3498db"
 WHITE = "#ecf0f1"
 GRAY = "#95a5a6"
-DARKGRAY = "#7f8c8d"
+DARKGRAY = "#636e72"
+BLACK = "black"
+
+COURTCOLOR = "#C79C70"
+COURTCOLORLIGHT = "#D2B48C"
+
+
